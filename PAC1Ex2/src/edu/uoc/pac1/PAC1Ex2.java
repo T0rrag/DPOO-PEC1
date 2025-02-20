@@ -50,17 +50,12 @@ public class PAC1Ex2 {
     }
 
     public static void getCompoundsForDrugs(String[] compoundsNames, int[] alkaliMetalIndexes, int[] alkalineMetalQuantities, int[] halogenIndexes, int[] halogenQuantities) {
-        String[] compoundsNames,
-        int[] alkaliMetalIndexes,
-        int[] alkalineMetalQuantities,
-        int[] halogenIndexes,
-        int[] halogenQuantities
-    ) {
-            ArrayList<String> suitableCompounds = new ArrayList<>();
+        int suitableCount = 0;
+        StringBuilder output = new StringBuilder("Results of the compounds for drugs:") + System.lineSeparator()));
 
-            // Recorrer todos los compuestos
+            // ITERATE THROUGH COMPONENTS
             for (int i = 0; i < compoundsNames.length; i++) {
-                // Calcular la masa molar del compuesto actual
+                // CALCULATE COMPONENTS MASS
                 double molarMass = calculateMolarMass(
                         alkaliMetalIndexes[i],
                         alkalineMetalQuantities[i],
@@ -68,12 +63,34 @@ public class PAC1Ex2 {
                         halogenQuantities[i]
                 );
 
-                // Verificar si la masa molar es adecuada para medicamentos
-                if (isSuitableForDrugs(molarMass)) {
-                    suitableCompounds.add(compoundsNames[i]);
+                // CALCULATE COMPOUND STABILITY
+                String stability = getStability(alkalineMetalQuantities[i], halogenQuantities[i]);
+
+                // CHECK IF MOLAR MASS IS CORRECT
+                boolean isSuitable = isSuitableForDrugs(molarMass);
+
+                // RESULT PRINT
+                output.append("\t")
+                        .append(compoundsNames[i])
+                        .append(" (")
+                        .append(stability)
+                        .append(") is ")
+                        .append(isSuitable ? "suitable" : "not suitable")
+                        .append(" for drugs.")
+                        .append(System.lineSeparator());
+
+                // COUNTER FOR SUITABLES
+                if (isSuitable) {
+                    suitableCount++;
                 }
             }
 
-            return suitableCompounds;
-        }
-}
+        // CALCULATE FINAL RESULTS
+        output.append("Final result: ")
+                .append(suitableCount)
+                .append(" compounds are suitable for drugs.")
+                .append(System.lineSeparator());
+
+        // PRINT FINAL RESULT
+        System.out.print(output.toString());
+    }

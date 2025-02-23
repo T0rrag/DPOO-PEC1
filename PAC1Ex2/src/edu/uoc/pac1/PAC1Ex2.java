@@ -39,51 +39,56 @@ public class PAC1Ex2 {
         int totalAtoms = alkaliAtoms + halogenAtoms;
         switch (totalAtoms) {
             //FROM PAC1Ex2TEST
-            case 2: return "Very stable";
-            case 3: return "Moderately stable";
-            case 4: return "Moderately stable";
-            case 5: return "Very unstable";
-            case 6: return "Very unstable";
-            default: return "Unknown";
+            case 2:
+                return "Very stable";
+            case 3:
+                return "Moderately stable";
+            case 4:
+                return "Moderately stable";
+            case 5:
+                return "Very unstable";
+            case 6:
+                return "Very unstable";
+            default:
+                return "Unknown";
         }
 
     }
 
     public static void getCompoundsForDrugs(String[] compoundsNames, int[] alkaliMetalIndexes, int[] alkalineMetalQuantities, int[] halogenIndexes, int[] halogenQuantities) {
         int suitableCount = 0;
-        StringBuilder output = new StringBuilder("Results of the compounds for drugs:") + System.lineSeparator()));
+        StringBuilder output = new StringBuilder("Results of the compounds for drugs:").append(System.lineSeparator());
+        // ITERATE THROUGH COMPONENTS
+        for (int i = 0; i < compoundsNames.length; i++) {
+            // CALCULATE COMPONENTS MASS
+            double molarMass = calculateMolarMass(
+                    alkaliMetalIndexes[i],
+                    alkalineMetalQuantities[i],
+                    halogenIndexes[i],
+                    halogenQuantities[i]
+            );
 
-            // ITERATE THROUGH COMPONENTS
-            for (int i = 0; i < compoundsNames.length; i++) {
-                // CALCULATE COMPONENTS MASS
-                double molarMass = calculateMolarMass(
-                        alkaliMetalIndexes[i],
-                        alkalineMetalQuantities[i],
-                        halogenIndexes[i],
-                        halogenQuantities[i]
-                );
+            // CALCULATE COMPOUND STABILITY
+            String stability = getStability(alkalineMetalQuantities[i], halogenQuantities[i]);
 
-                // CALCULATE COMPOUND STABILITY
-                String stability = getStability(alkalineMetalQuantities[i], halogenQuantities[i]);
+            // CHECK IF MOLAR MASS IS CORRECT
+            boolean isSuitable = isSuitableForDrugs(molarMass);
 
-                // CHECK IF MOLAR MASS IS CORRECT
-                boolean isSuitable = isSuitableForDrugs(molarMass);
+            // RESULT PRINT
+            output.append("\t")
+                    .append(compoundsNames[i])
+                    .append(" (")
+                    .append(stability)
+                    .append(") is ")
+                    .append(isSuitable ? "suitable" : "not suitable")
+                    .append(" for drugs.")
+                    .append(System.lineSeparator());
 
-                // RESULT PRINT
-                output.append("\t")
-                        .append(compoundsNames[i])
-                        .append(" (")
-                        .append(stability)
-                        .append(") is ")
-                        .append(isSuitable ? "suitable" : "not suitable")
-                        .append(" for drugs.")
-                        .append(System.lineSeparator());
-
-                // COUNTER FOR SUITABLES
-                if (isSuitable) {
-                    suitableCount++;
-                }
+            // COUNTER FOR SUITABLES
+            if (isSuitable) {
+                suitableCount++;
             }
+        }
 
         // CALCULATE FINAL RESULTS
         output.append("Final result: ")
@@ -94,3 +99,4 @@ public class PAC1Ex2 {
         // PRINT FINAL RESULT
         System.out.print(output.toString());
     }
+}

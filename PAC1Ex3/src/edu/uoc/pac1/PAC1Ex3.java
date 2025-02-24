@@ -123,38 +123,29 @@ public class PAC1Ex3 {
 
 
     public static char[][] dropPiece(char[][] board, int column, char color) {
-        // CHECK FOR VALID COLUMN
+    // CHECK FOR VALID COLMN
         if (!isValidColumn(board, column)) {
             System.out.println("This column is invalid or full.");
             return board;
         }
 
-        // FIND LOWEST IN COLUMN
-        int row = getAvailableRow(board, column);
-
-        // DROP PIECE
-        board[row][column] = color;
-
-        // PRINT UPDATED BOARD
-        printBoard(board);
-
-        // CHECK COLOR WINNER + PRINT
-        if (checkWin(board, color)) {
-            System.out.println("Player " + color + " wins!");
-        }
-
-        // BACK TO BOARD
-        return board;
-    }
-
-    // AUX FOR LOWEST ROW IN A COLUMN
-    private static int getAvailableRow(char[][] board, int column) {
-        for (int i = MAX_ROWS - 1; i >= 0; i--) {
-            if (board[i][column] == ' ') {
-                return i;
+        // DOWN-TOP SEARCH FOR EMPTY SPOTS
+        for (int row = MAX_ROWS - 1; row >= 0; row--) {
+            if (board[row][column] == ' ') {
+                board[row][column] = color;
+                // WHEN EMPTY BREAK TO PLACE PIECE
+                break;
             }
         }
-        //ELSE INVALID
-        return -1;
+
+        // PRINT BOARD AFTER PLACEMENT
+        printBoard(board);
+
+        // WINNER CHECK
+        if (checkWin(board, color)) {
+            System.out.println("Color " + color + " wins!");
+        }
+
+        return board;
     }
 }
